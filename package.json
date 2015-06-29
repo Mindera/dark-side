@@ -1,0 +1,38 @@
+{
+  "name": "dark-side",
+  "version": "0.0.1",
+  "description": "Let the dark side manage your something",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "keywords": [
+    "Pools",
+    "manage"
+  ],
+  "author": "Bruno Palos <bruno.palos@mindera.com> (http://www.mindera.com)",
+  "license": "MIT",
+  "dependencies": {
+    "install": "^0.1.8",
+    "intravenous": "^0.1.4-beta",
+    "lodash": "^3.9.3",
+    "q": "^1.4.1",
+    "yamljs": "^0.2.3"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "chai-as-promised": "^5.1.0",
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.6.0",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-mocha-cli": "^1.13.0",
+    "grunt-mocha-cov": "^0.4.0",
+    "grunt-mocha-istanbul": "^2.4.0",
+    "istanbul": "^0.3.15",
+    "jshint-stylish": "^2.0.1",
+    "load-grunt-tasks": "^3.2.0",
+    "mocha": "^2.2.5",
+    "sinon": "^1.15.3",
+    "time-grunt": "^1.2.1"
+  }
+}
