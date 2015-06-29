@@ -38,7 +38,7 @@ describe('Darth Vader', function () {
         expect(function () { new DarthVader(fleetPlans, {}, {}); }).to.throw('The size is invalid!');
     });
 
-    it('should pick a fighter from star destroyer fleet', function () {
+    it('should pick a fighter from star destroyer fleet from properties', function () {
         var fleetPlans = {
             'default' : {
                 'profile' : 'default',
@@ -65,6 +65,35 @@ describe('Darth Vader', function () {
         var figther = victim.pickOne({'profile' : 'default'});
         expect(figther).to.not.equal(undefined);
         expect(figther.whoAmI).to.equal('a fighter');
+    });
+
+    it('should pick a fighter from star destroyer fleet', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getADestroyer: function () {
+                return {
+                    getOneFighter: function () {
+                        return {'whoAmI' : 'a fighter'};
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+        var fighter = victim.pickOneRandomly();
+        expect(fighter).to.not.equal(undefined);
+        expect(fighter.whoAmI).to.equal('a fighter');
     });
 
     it('should throw exception when no fighter is found', function () {

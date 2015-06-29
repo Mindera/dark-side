@@ -38,16 +38,25 @@ var darthVader = function (fleetPlans, fleetRegistry, starDestroyerFactory) {
         }
     }
 
+    function getOneFighterFromDestroyer(starDestroyer) {
+        if (!_.isUndefined(starDestroyer)) {
+            return starDestroyer.getOneFighter();
+        } else {
+            throw new exceptions.NotFoundException('No element available on any pool');
+        }
+    }
+
     initFleet();
 
     return {
         pickOne: function (properties) {
             var starDestroyer = fleetRegistry.getStarDestroyerByProperties(properties);
-            if (!_.isUndefined(starDestroyer)) {
-                return starDestroyer.getOneFighter();
-            } else {
-                throw new exceptions.NotFoundException('No element available on any pool');
-            }
+            return getOneFighterFromDestroyer(starDestroyer);
+        },
+
+        pickOneRandomly: function () {
+            var starDestroyer = fleetRegistry.getADestroyer();
+            return getOneFighterFromDestroyer(starDestroyer);
         }
     };
 };
