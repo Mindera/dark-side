@@ -17,6 +17,47 @@ var starDestroyer = function (commander, chiefMechanic, deckOfficer) {
         deckOfficer.manageFighters(fightersOnDeck, fightersInMission);
     }
 
+    function putFighterInMission(fighter) {
+        if (!_.isUndefined(fighter)) {
+            fightersInMission.put('name-' + Date.now(), fighter);
+        }
+    }
+
+    function putBustedFighterIntoRepair(busted) {
+        var bustedFighter = {};
+        if (busted) {
+            fightersInRepair.push(bustedFighter);
+            bustedFighter = busted.getElement();
+        }
+        return bustedFighter;
+    }
+
+    function getFighterToRecall(fighterAttr, fighterValue) {
+        var fighterToRecall = null;
+        _.forEach(fightersInMission.values(), function (wrappedFighter, key) {
+            var fighter = wrappedFighter.value;
+            if (fighter.hasOwnProperty(fighterAttr) && fighter[fighterAttr] === fighterValue) {
+                fighterToRecall = key;
+                return false;
+            }
+        });
+        return fighterToRecall;
+    }
+
+    function recallFighter(fighterToRecall) {
+        var fighter;
+
+        if (!_.isNull(fighterToRecall)) {
+            fighter = fightersInMission.get(fighterToRecall);
+
+            fightersInMission.remove(fighterToRecall);
+            // Add back to the end of the pool
+            fightersOnDeck.push(fighter);
+        }
+
+        return fighter;
+    }
+
     initOfficers();
 
     return {
@@ -25,21 +66,35 @@ var starDestroyer = function (commander, chiefMechanic, deckOfficer) {
         },
 
         getOneFighter: function () {
-            var ship = fightersOnDeck.pop();
-
-            if (!_.isUndefined(ship)) {
-                fightersInMission.put('name-' + Date.now(), ship);
-                return ship;
-            }
-            return undefined;
+            var fighter = fightersOnDeck.pop();
+            putFighterInMission(fighter);
+            return fighter;
         },
 
         getScrapYard: function () {
-            return scrapYard;
+            return scrapYard.values();
+        },
+
+        putOneFromScrapYardIntoRepair: function () {
+            var busted = scrapYard.pop();
+            return putBustedFighterIntoRepair(busted);
+        },
+
+        getFightersInRepair: function () {
+            return fightersInRepair.values();
+        },
+
+        getFightersInInspection: function () {
+            return fightersInInspection;
         },
 
         isCombatReady: function () {
             return fightersOnDeck.length() > 0;
+        },
+
+        recallFighter: function (attr, value) {
+            var fighterToRecall = getFighterToRecall(attr, value);
+            return recallFighter(fighterToRecall);
         }
     };
 };

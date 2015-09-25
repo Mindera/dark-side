@@ -39,11 +39,57 @@ var darthVader = function (fleetPlans, fleetRegistry, starDestroyerFactory) {
     }
 
     function getOneFighterFromDestroyer(starDestroyer) {
-        if (!_.isUndefined(starDestroyer)) {
-            return starDestroyer.getOneFighter();
-        } else {
-            throw new exceptions.NotFoundException('No element available on any pool');
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
         }
+        return starDestroyer.getOneFighter();
+    }
+
+    function getScrapYardFromDestroyer(starDestroyer) {
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+        return starDestroyer.getScrapYard();
+    }
+
+    function getFightersOnDeckFromDestroyer(starDestroyer) {
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+        return starDestroyer.getFightersOnDeck();
+    }
+
+    function getFightersInRepairFromDestroyer(starDestroyer) {
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+        return starDestroyer.getFightersInRepair();
+    }
+
+    function getFightersInInspectionFromDestroyer(starDestroyer) {
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+        return starDestroyer.getFightersInInspection();
+    }
+
+    function recallUsedFromDestroyer(starDestroyer, fighterAttr, fighterValue) {
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+        return starDestroyer.recallFighter(fighterAttr, fighterValue);
+    }
+
+    function tryToRecoverABrokenFighter(starDestroyer) {
+        if (_.isUndefined(starDestroyer)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+
+        var recovered = starDestroyer.putOneFromScrapYardIntoRepair();
+        if (_.isUndefined(recovered)) {
+            throw exceptions.buildNotFoundException('Pool not found');
+        }
+        return recovered;
     }
 
     initFleet();
@@ -57,6 +103,36 @@ var darthVader = function (fleetPlans, fleetRegistry, starDestroyerFactory) {
         pickOneRandomly: function () {
             var starDestroyer = fleetRegistry.getADestroyer();
             return getOneFighterFromDestroyer(starDestroyer);
+        },
+
+        getTrashForPool: function (poolName) {
+            var starDestroyer = fleetRegistry.getStarDestroyerByName(poolName);
+            return getScrapYardFromDestroyer(starDestroyer);
+        },
+
+        getFreeForPool: function (poolName) {
+            var starDestroyer = fleetRegistry.getStarDestroyerByName(poolName);
+            return getFightersOnDeckFromDestroyer(starDestroyer);
+        },
+
+        getBrokenForPool: function (poolName) {
+            var starDestroyer = fleetRegistry.getStarDestroyerByName(poolName);
+            return getFightersInRepairFromDestroyer(starDestroyer);
+        },
+
+        recoverOneBrokenFromPool: function (poolName) {
+            var starDestroyer = fleetRegistry.getStarDestroyerByName(poolName);
+            return tryToRecoverABrokenFighter(starDestroyer);
+        },
+
+        getManagedForPool: function (poolName) {
+            var starDestroyer = fleetRegistry.getStarDestroyerByName(poolName);
+            return getFightersInInspectionFromDestroyer(starDestroyer);
+        },
+
+        recallFromUsed: function (poolName, attribute, value) {
+            var starDestroyer = fleetRegistry.getStarDestroyerByName(poolName);
+            return recallUsedFromDestroyer(starDestroyer, attribute, value);
         }
     };
 };

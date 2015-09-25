@@ -62,8 +62,8 @@ describe('Star Destroyer', function () {
 
     it('should get scrap yard', function () {
         var scrapYard = victim.getScrapYard();
-        expect(scrapYard.length()).to.equal(1);
-        expect(scrapYard.getAt(0).whoAmI).to.equal('a fighter on the scrap yard');
+        expect(scrapYard.length).to.equal(1);
+        expect(scrapYard[0].whoAmI).to.equal('a fighter on the scrap yard');
     });
 
     it('should check if destroyer is combat ready', function () {

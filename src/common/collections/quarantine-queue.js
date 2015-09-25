@@ -14,11 +14,11 @@ var quarantineQueue = function () {
 
         return {
             getReason: function () {
-                return wrapped.value;
+                return wrapped.reason;
             },
 
             getElement: function () {
-                return wrapped.reason;
+                return wrapped.value;
             }
         };
     }

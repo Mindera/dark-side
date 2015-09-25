@@ -72,7 +72,12 @@ describe('Star Destroyer Commander', function () {
         var scrapYard = new Queue();
 
         // Put fighter in repair
-        fightersInRepair.push({'whoAmI': 'a fighter to repair'});
+        var mockedFighter = {'whoAmI': 'a fighter to repair'};
+        fightersInRepair.push({
+            getElement: function () {
+                return mockedFighter;
+            }
+        });
 
         victim.manageFighters(fightersOnDeck, fightersInMission, fightersInInspection, fightersInRepair, scrapYard);
 
@@ -95,7 +100,12 @@ describe('Star Destroyer Commander', function () {
         var scrapYard = new Queue();
 
         // Put fighter in repair
-        fightersInRepair.push({'whoAmI': 'a fighter to repair'});
+        var mockedFighter = {'whoAmI': 'a fighter to repair'};
+        fightersInRepair.push({
+            getElement: function () {
+                return mockedFighter;
+            }
+        });
 
         victim.manageFighters(fightersOnDeck, fightersInMission, fightersInInspection, fightersInRepair, scrapYard);
 
