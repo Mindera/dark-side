@@ -10,23 +10,24 @@ describe('Ship Parts supplier', function () {
         // The mainModule is './node_modules/mocha/bin'
 
         'default' : {
-            'creator': '../../../test/death-star/mock/mocked-creator.js',
-            'recoverer': '../../../test/death-star/mock/mocked-recoverer.js',
-            'healthChecker': '../../../test/death-star/mock/mocked-health-checker.js'
+            'creator': 'test/death-star/mock/mocked-creator.js',
+            'recoverer': 'test/death-star/mock/mocked-recoverer.js',
+            'healthChecker': 'test/death-star/mock/mocked-health-checker.js'
         },
 
         'norecoverer': {
-            'creator': '../../../test/death-star/mock/mocked-creator.js',
-            'healthChecker': '../../../test/death-star/mock/mocked-health-checker.js'
+            'creator': 'test/death-star/mock/mocked-creator.js',
+            'healthChecker': 'test/death-star/mock/mocked-health-checker.js'
         },
 
         'nohealthchecker': {
-            'creator': '../../../test/death-star/mock/mocked-creator.js',
-            'recoverer': '../../../test/death-star/mock/mocked-recoverer.js'
+            'creator': 'test/death-star/mock/mocked-creator.js',
+            'recoverer': 'test/death-star/mock/mocked-recoverer.js'
         }
     };
 
     it('should get creator by profile name', function () {
+
         var victim = rolesDelegator(mockedProfile);
 
         var creator = victim.getCreator('default');
@@ -43,8 +44,8 @@ describe('Ship Parts supplier', function () {
     it('should return undefined no creator is found', function () {
         var mockedProfile = {
             'nocreator': {
-                'recoverer': '../../../test/death-star/mock/mocked-recoverer.js',
-                'healthChecker': '../../../test/death-star/mock/mocked-health-checker.js'
+                'recoverer': 'test/death-star/mock/mocked-recoverer.js',
+                'healthChecker': 'test/death-star/mock/mocked-health-checker.js'
             }
         };
 

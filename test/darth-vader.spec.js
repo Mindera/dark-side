@@ -227,4 +227,316 @@ describe('Darth Vader', function () {
 
         expect(function () { victim.getTrashForPool({'profile' : 'default'}); }).to.throw(Error);
     });
+
+    it('should return all free fighters in pool', function () {
+
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {
+                return {
+                    getFightersOnDeck: function () {
+                        return [{'whoAmI' : 'a fighter'},{'whoAmI' : '2nd fighter'}];
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        var fighters = victim.getFreeForPool('default');
+
+        expect(fighters.length).to.equal(2);
+        expect(fighters[0]).to.not.equal(undefined);
+        expect(fighters[0].whoAmI).to.equal('a fighter');
+        expect(fighters[1]).to.not.equal(undefined);
+        expect(fighters[1].whoAmI).to.equal('2nd fighter');
+    });
+
+    it('should return undefined when no fighters are in poll', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {}
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        expect(function () { victim.getFreeForPool({'profile' : 'default'}); }).to.throw(Error);
+    });
+
+    it('should return all free fighters in repair pool', function () {
+
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {
+                return {
+                    getFightersInRepair : function () {
+                        return [{'whoAmI' : 'a fighter'},{'whoAmI' : '2nd fighter'}];
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        var fighters = victim.getBrokenForPool('default');
+
+        expect(fighters.length).to.equal(2);
+        expect(fighters[0]).to.not.equal(undefined);
+        expect(fighters[0].whoAmI).to.equal('a fighter');
+        expect(fighters[1]).to.not.equal(undefined);
+        expect(fighters[1].whoAmI).to.equal('2nd fighter');
+    });
+
+    it('should return undefined when no fighters are in repair poll', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {}
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        expect(function () { victim.getBrokenForPool({'profile' : 'default'}); }).to.throw(Error);
+    });
+
+
+    it('should recover one fighter from trash poll', function () {
+
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {
+                return {
+                    putOneFromScrapYardIntoRepair : function () {
+                        return {'whoAmI' : 'a fighter'};
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        var fighter = victim.recoverOneBrokenFromPool('default');
+
+        expect(fighter).to.not.equal(undefined);
+        expect(fighter.whoAmI).to.equal('a fighter');
+    });
+
+    it('should return undefined when no fighters in trash to recover', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {}
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        expect(function () { victim.recoverOneBrokenFromPool({'profile' : 'default'}); }).to.throw(Error);
+    });
+
+    it('should return undefined when fail to recover a fighter', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {
+                return {
+                    putOneFromScrapYardIntoRepair : function () {
+                        return undefined;
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        expect(function () { victim.recoverOneBrokenFromPool({'profile' : 'default'}); }).to.throw(Error);
+    });
+
+
+    it('should return all free fighters for inspection', function () {
+
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {
+                return {
+                    getFightersInInspection : function () {
+                        return [{'whoAmI' : 'a fighter'},{'whoAmI' : '2nd fighter'}];
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        var fighters = victim.getManagedForPool('default');
+
+        expect(fighters.length).to.equal(2);
+        expect(fighters[0]).to.not.equal(undefined);
+        expect(fighters[0].whoAmI).to.equal('a fighter');
+        expect(fighters[1]).to.not.equal(undefined);
+        expect(fighters[1].whoAmI).to.equal('2nd fighter');
+    });
+
+    it('should return undefined when no fighters are in inspection', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {}
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        expect(function () { victim.getManagedForPool({'profile' : 'default'}); }).to.throw(Error);
+    });
+
+
+    it('should return recall used', function () {
+
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {
+                return {
+                    recallFighter : function (attr, value) {
+                        return {attr : attr, value: value};
+                    }
+                };
+            }
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        var fighter = victim.recallFromUsed('default','jedy','obi one');
+
+        expect(fighter).to.not.equal(undefined);
+        expect(fighter.attr).to.equal('jedy');
+        expect(fighter.value).to.equal('obi one');
+    });
+
+    it('should return undefined when no fighters are available for recall', function () {
+        var fleetPlans = {
+            'default' : {
+                'profile' : 'default',
+                'size' : 1
+            }
+        };
+
+        var fleetRegistryMock = {
+            registerStarDestroyer: function () {},
+            getStarDestroyerByName: function () {}
+        };
+
+        var starDestroyerFactoryMock = {
+            createDestroyer: function () {}
+        };
+
+        var victim = new DarthVader(fleetPlans, fleetRegistryMock, starDestroyerFactoryMock);
+
+        expect(function () { victim.recallFromUsed({'profile' : 'default'}); }).to.throw(Error);
+    });
+
 });

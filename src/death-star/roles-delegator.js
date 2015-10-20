@@ -27,18 +27,18 @@ var rolesDelegator = function (profilesConf) {
             throw new Error('A creator must be defined in profile ' + profile);
         }
 
-        profilesHandler[profile].creator = process.mainModule.require('./' + profilesConf[profile].creator);
+        profilesHandler[profile].creator = process.mainModule.require(profilesConf[profile].creator);
     }
 
     function requireRecoverer(profilesHandler, profile) {
         if (profilesConf[profile].recoverer) {
-            profilesHandler[profile].recoverer = process.mainModule.require('./' + profilesConf[profile].recoverer);
+            profilesHandler[profile].recoverer = process.mainModule.require(profilesConf[profile].recoverer);
         }
     }
 
     function requireHealthChecker(profilesHandler, profile) {
         if (profilesConf[profile].healthChecker) {
-            profilesHandler[profile].healthChecker = process.mainModule.require('./' + profilesConf[profile].healthChecker);
+            profilesHandler[profile].healthChecker = process.mainModule.require(profilesConf[profile].healthChecker);
         }
     }
 

@@ -24,10 +24,10 @@ var starDestroyer = function (commander, chiefMechanic, deckOfficer) {
     }
 
     function putBustedFighterIntoRepair(busted) {
-        var bustedFighter = {};
+        var bustedFighter;
         if (busted) {
-            fightersInRepair.push(bustedFighter);
-            bustedFighter = busted.getElement();
+            bustedFighter = busted;
+            fightersInRepair.pushToQuarantine(bustedFighter);
         }
         return bustedFighter;
     }
