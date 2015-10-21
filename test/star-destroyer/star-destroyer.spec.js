@@ -62,8 +62,8 @@ describe('Star Destroyer', function () {
 
     it('should get scrap yard', function () {
         var scrapYard = victim.getScrapYard();
-        expect(scrapYard.length()).to.equal(1);
-        expect(scrapYard.getAt(0).whoAmI).to.equal('a fighter on the scrap yard');
+        expect(scrapYard.length).to.equal(1);
+        expect(scrapYard[0].whoAmI).to.equal('a fighter on the scrap yard');
     });
 
     it('should check if destroyer is combat ready', function () {
@@ -78,6 +78,57 @@ describe('Star Destroyer', function () {
     });
 
     it('should check if destroyer is not combat ready', function () {
+        // Use all fighters
+        victim.getOneFighter();
+        victim.getOneFighter();
+        victim.getOneFighter();
 
+        expect(victim.isCombatReady()).to.equal(false);
+    });
+
+    it('should recall a fighter from a fight', function() {
+        expect(victim.getFightersOnDeck().length).to.equal(3);
+        var fighterForRecall = victim.recallFighter('whoAmI','a fighter in mission');
+        expect(fighterForRecall.whoAmI).to.equal('a fighter in mission' );
+        expect(victim.getFightersOnDeck().length).to.equal(4);
+    });
+
+    it('should return undefined if there is no fighter to recall', function() {
+        expect(victim.getFightersOnDeck().length).to.equal(3);
+        var fighterForRecall = victim.recallFighter('whoAmI','a fighter in mission');
+        expect(fighterForRecall.whoAmI).to.equal('a fighter in mission' );
+        expect(victim.getFightersOnDeck().length).to.equal(4);
+        // second call
+        fighterForRecall = victim.recallFighter('whoAmI','a fighter in mission');
+        expect(fighterForRecall).to.equal(undefined);
+        expect(victim.getFightersOnDeck().length).to.equal(4);
+    });
+
+    it('should put fighter from trash in repair', function() {
+        expect(victim.getScrapYard().length).to.equal(1);
+        expect(victim.getFightersInRepair().length).to.equal(1);
+        var fighterForBusted = victim.putOneFromScrapYardIntoRepair();
+        expect(fighterForBusted.whoAmI).to.equal('a fighter on the scrap yard' );
+        expect(victim.getScrapYard().length).to.equal(0);
+        expect(victim.getFightersInRepair().length).to.equal(2);
+    });
+
+    it('should return undefined if there is no fighter in trash ', function() {
+        expect(victim.getScrapYard().length).to.equal(1);
+        expect(victim.getFightersInRepair().length).to.equal(1);
+        var fighterForBusted = victim.putOneFromScrapYardIntoRepair();
+        expect(fighterForBusted.whoAmI).to.equal('a fighter on the scrap yard' );
+        expect(victim.getScrapYard().length).to.equal(0);
+        expect(victim.getFightersInRepair().length).to.equal(2);
+
+        fighterForBusted = victim.putOneFromScrapYardIntoRepair();
+        expect(fighterForBusted).to.equal(undefined);
+        expect(victim.getScrapYard().length).to.equal(0);
+        expect(victim.getFightersInRepair().length).to.equal(2);
+    });
+
+    it('should check figth for inspection ', function() {
+        expect(victim.getFightersInInspection().length).to.equal(1);
+        expect(victim.getFightersInInspection()[0].whoAmI).to.equal('a fighter in inspection');
     });
 });

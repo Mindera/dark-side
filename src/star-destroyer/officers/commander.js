@@ -50,7 +50,7 @@ var commander = function (appConfig, creator, recoverer, shipSize) {
     }
 
     function recoverFighter(fighter) {
-        var recovered = recoverer.recover(fighter);
+        var recovered = recoverer.recover(fighter.getElement());
         recovered.then(function (value) {
             self.fightersOnDeck.push(value);
         }, function (error) {
